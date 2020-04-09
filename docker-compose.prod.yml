@@ -1,0 +1,8 @@
+version: '3.5'
+
+services: 
+    gitlab:
+        hostname: ${gitlab_url}
+        labels: 
+            - traefik.frontend.rule=Host:${gitlab_url}
+            - ghosts.host=${gitlab_url}

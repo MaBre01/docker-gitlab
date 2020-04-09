@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+    gitlab:
+        hostname: gitlab.local
+        environment: 
+            GITLAB_OMNIBUS_CONFIG: |
+                external_url 'https://gitlab.local'
+                gitlab_rails['gitlab_shell_ssh_port'] = 2222
+                nginx['listen_port'] = 80
+                nginx['listen_https'] = false
+                nginx['proxy_set_headers'] = {
+                    'X-Forwarded-Proto' => 'https',
+                    'X-Forwarded-Ssl' => 'on',
+                    'Host' => 'gitlab.local'
+                }
+                registry['enable'] = true
+                registry_external_url 'https://registry.gitlab.local'
+                registry_nginx['listen_port'] = 80
+                registry_nginx['listen_https'] = false
+        labels: 
+            - traefik.frontend.rule=Host:gitlab.local
+            - ghosts.host=gitlab.local
