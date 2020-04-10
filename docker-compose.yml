@@ -5,25 +5,31 @@ networks:
     server_proxy:
         external: true
 
+volumes: 
+    data:
+        name: gitlab_data
+    logs: 
+        name: gitlab_logs
+
 services: 
     gitlab:
         image: gitlab/gitlab-ce:latest
         container_name: gitlab
         restart: unless-stopped
-        ports:
+        ports: 
             - "2222:22"
         networks: 
             - default
             - server_proxy
         volumes: 
-            - /data/gitlab/config:/etc/gitlab/
-            - /data/gitlab/logs:/var/log/gitlab/
-            - /data/gitlab/data:/var/opt/gitlab/
+            - ./.docker/gitlab/config/gitlab.rb:/etc/gitlab/gitlab.rb
+            - logs:/var/log/gitlab/
+            - data:/var/opt/gitlab/
         labels: 
             - traefik.enable=true
             - traefik.port=80
             - traefik.frontend.redirect.entryPoint=https
-            - traefik.docker.networks=server_proxy
+            - traefik.docker.network=server_proxy
             - ghosts.category=~Repository
             - ghosts.description=GitLab CE server
             - ghosts.proto=https
