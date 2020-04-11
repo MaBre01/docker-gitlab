@@ -2,6 +2,8 @@ version: '3.5'
 
 networks: 
     default: {}
+    runners:
+        name: gitlab_runners
     server_proxy:
         external: true
 
@@ -10,6 +12,8 @@ volumes:
         name: gitlab_data
     logs: 
         name: gitlab_logs
+    runner_config:
+        name: gitlab_runner_data
 
 services: 
     gitlab:
@@ -20,6 +24,7 @@ services:
             - "2222:22"
         networks: 
             - default
+            - runners
             - server_proxy
         volumes: 
             - ./.docker/gitlab/config/gitlab.rb:/etc/gitlab/gitlab.rb
@@ -33,3 +38,16 @@ services:
             - ghosts.category=~Repository
             - ghosts.description=GitLab CE server
             - ghosts.proto=https
+
+    runner:
+        image: gitlab/gitlab-runner:latest
+        container_name: gitlab_runner
+        restart: unless-stopped
+        networks: 
+            - default
+        volumes: 
+            - /var/run/docker.sock:/var/run/docker.sock
+            - runner_config:/etc/gitlab-runner
+            - ./.docker/gitlab-runner/config/autoregister.sh:/usr/local/bin/autoregister
+        environment: 
+            GITLAB_URL: "http://gitlab"
