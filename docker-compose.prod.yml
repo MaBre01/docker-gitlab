@@ -7,6 +7,17 @@ services:
             GITLAB_OMNIBUS_CONFIG: |
                 external_url 'https://${gitlab_url}'
                 registry_external_url 'https://${gitlab_registry_url}'
+                gitlab_rails['smtp_enable'] = true
+                gitlab_rails['smtp_address'] = "ssl0.ovh.net"
+                gitlab_rails['smtp_port'] = 465
+                gitlab_rails['smtp_user_name'] = "${gitlab_smtp_username}"
+                gitlab_rails['smtp_password'] = "${gitlab_smtp_password}"
+                gitlab_rails['smtp_domain'] = "ssl0.ovh.net"
+                gitlab_rails['smtp_authentication'] = "login"
+                gitlab_rails['smtp_enable_starttls_auto'] = true
+                gitlab_rails['smtp_tls'] = true
+                gitlab_rails['smtp_openssl_verify_mode'] = 'none'
+
         labels: 
             - traefik.frontend.rule=Host:${gitlab_url},${gitlab_registry_url}
             - ghosts.host=${gitlab_url},${gitlab_registry_url}
