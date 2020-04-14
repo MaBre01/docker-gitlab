@@ -2,7 +2,7 @@
 
 ## Content
 
-This compose contains GitLab CE and GitLab Runner and run using my [Traefik Configuration](https://github.com/MaBre01/docker-toolkit). 
+This compose contains GitLab CE and GitLab Runner and run using my [Server Configuration](https://github.com/MaBre01/docker-toolkit). 
 GitLab Registry is also set up, so we can push Docker image on this GitLab Server.
 
 GitLab Runner is installed on the same server with GitLab but it is not recommanded to do this.
@@ -27,6 +27,8 @@ You should use this docker-compose command to set up this configuration in local
 
 ### Configuration
 
+#### Link with GitLab Runner
+
 When GitLab is **healthy**, you can go on, to get the token for GitLab Runner.
 Go to the runners page : 
 
@@ -37,6 +39,16 @@ Copy the token and launch this command :
 > docker-compose run --rm --entrypoint autoregister runner *your-gitlab-token*
 
 This will link your GitLab and your GitLab Runner
+
+#### SMTP
+
+For the local environment, the SMTP server is MailHog (see my server [Server Configuration](https://github.com/MaBre01/docker-toolkit)).
+
+For the production environment, I set up the OVH configuration. You can add in your *.env* 2 variables :
+- gitlab_smtp_username
+- gitlab_smtp_password
+
+If you want to use another SMTP server you can get it on [GitLab Configuration](https://docs.gitlab.com/omnibus/settings/smtp.html).
 
 ## URL
 
