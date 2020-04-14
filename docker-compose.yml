@@ -6,6 +6,8 @@ networks:
         name: gitlab_runners
     server_proxy:
         external: true
+    server_mail:
+        external: true
 
 volumes: 
     data:

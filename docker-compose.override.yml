@@ -7,6 +7,14 @@ services:
             GITLAB_OMNIBUS_CONFIG: |
                 external_url 'https://gitlab.local'
                 registry_external_url 'https://registry.local'
+                gitlab_rails['smtp_enable'] = true
+                gitlab_rails['smtp_address'] = "mailhog"
+                gitlab_rails['smtp_port'] = 1025
+                gitlab_rails['smtp_enable_starttls_auto'] = false
+                gitlab_rails['smtp_tls'] = false
+
+        networks: 
+            - server_mail
         labels: 
             - traefik.frontend.rule=Host:gitlab.local,registry.local
             - ghosts.host=gitlab.local,registry.local
